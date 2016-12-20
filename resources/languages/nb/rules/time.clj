@@ -17,6 +17,10 @@
   [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
+  "on <named-day> last week" ; "on Saturday" is refering to last Saturday 
+  [#"(?i)på" {:form :day-of-week}]
+  (pred-nth %2 -1)
+
   "on <date>" ; on Wed, March 23
   [#"(?i)den|på" (dim :time)]
   %2 ; does NOT dissoc latent
@@ -25,36 +29,35 @@
   [#"(?i)på en" {:form :day-of-week}]
   %2 ; does NOT dissoc latent
 
-
   ;;;;;;;;;;;;;;;;;;;
   ;; Named things
 
   "named-day"
-  #"(?i)mandag|man\.?"
+  #"(?i)mandag(en)?|man\.?"
   (day-of-week 1)
 
   "named-day"
-  #"(?i)tirsdag|tirs?\.?"
+  #"(?i)tirsdag(en)?|tirs?\.?"
   (day-of-week 2)
 
   "named-day"
-  #"(?i)onsdag|ons\.?"
+  #"(?i)onsdag(en)?|ons\.?"
   (day-of-week 3)
 
   "named-day"
-  #"(?i)torsdag|tors?\.?"
-  (day-of-week 4)
+  #"(?i)torsdag(en)?|tors?\.?"
+  (intersect (day-of-week 4) (cycle-nth :week -1))
 
   "named-day"
-  #"(?i)fredag|fre\.?"
+  #"(?i)fredag(en)?|fre\.?"
   (day-of-week 5)
 
   "named-day"
-  #"(?i)lørdag|lør\.?"
+  #"(?i)lørdag(en)?|lør\.?"
   (day-of-week 6)
 
   "named-day"
-  #"(?i)søndag|søn\.?"
+  #"(?i)søndag(en)?|søn\.?"
   (day-of-week 7)
 
   "named-month"

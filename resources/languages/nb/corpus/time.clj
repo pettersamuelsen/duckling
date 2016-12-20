@@ -20,8 +20,10 @@
 
   "mandag"
   "man."
-  "på mandag"
   (datetime 2013 2 18 :day-of-week 1)
+
+  "på lørdag"
+  (datetime 2013 2 9 :day-of-week 6 :day 9 :month 2)
 
   "Mandag den 18. februar"
   "Man, 18 februar"
@@ -33,7 +35,7 @@
   "torsdag"
   "tors"
   "tors."
-  (datetime 2013 2 14)
+  (datetime 2013 2 7)
 
   "fredag"
   "fre"
@@ -122,6 +124,9 @@
   (datetime 2013 2 18 :day-of-week 1 :day 18 :month 2)
 
 ;   ;; Cycles
+
+  "denne mandagen"
+  (datetime 2013 2 18 :grain :day)
 
   "denne uken"
   (datetime 2013 2 11 :grain :week)
@@ -295,7 +300,7 @@
   ;; Mixing date and time
 
   "klokken 9 på lørdag"
-  (datetime 2013 2 16 9 :day-of-week 6 :hour 9 :meridiem :am)
+  (datetime 2013 2 9 9 :day-of-week 6 :hour 9 :meridiem :am)
 
   "Fre, Jul 18, 2014 19:00"
   (datetime 2014 7 18 19 0 :day-of-week 5 :hour 7 :meridiem :pm)
@@ -537,10 +542,10 @@
   "torsdag fra 9:30 til 11:00"
   "torsdag mellom 9:30 og 11:00"
   "fra 9:30 til 11:00 på torsdag"
-  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
+  (datetime-interval [2013 2 7 9 30] [2013 2 7 11 1])
 
   "torsdag fra 9 til 11"
-  (datetime-interval [2013 2 14 9] [2013 2 14 12])
+  (datetime-interval [2013 2 7 9] [2013 2 7 12])
 
   "11:30-13:30" ; go train this rule!
   "11:30-13:30"
@@ -567,7 +572,7 @@
   "torsdag kl. 8:00 GMT"
   "torsdag klokken 8:00 GMT"
   "torsdag 08:00 GMT"
-  (datetime 2013 2 14 8 00 :timezone "GMT")
+  (datetime 2013 2 7 8 00 :timezone "GMT")
 
   ;; Bookface tests
   "idag kl. 14"
