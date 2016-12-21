@@ -86,6 +86,18 @@
   "15/02"
   (datetime 2013 2 15 :day 15 :month 2)
 
+  "i januar"
+  (datetime 2013 1 :month 1)
+
+  "i februar"
+  (datetime 2013 2 :month 2)
+
+  "i mars"
+  (datetime 2012 3 :month 3)
+
+  "i april"
+  (datetime 2012 4 :month 4)
+
   "8 Aug"
   (datetime 2013 8 8 :day 8 :month 8)
 
@@ -174,8 +186,14 @@
   "søndag i forrige uke"
   (datetime 2013 2 10 :day-of-week 7)
 
+  "forrige mandag"
+  (datetime 2013 2 4 :day-of-week 1)
+
   "forrige tirsdag"
   (datetime 2013 2 5 :day-of-week 2)
+
+  "forrige onsdag"
+  (datetime 2013 2 6 :day-of-week 3)
 
   "neste tirsdag" ; when today is Tuesday, "neste tirsdag" (next tuesday) is a week from now
   (datetime 2013 2 19 :day-of-week 2)

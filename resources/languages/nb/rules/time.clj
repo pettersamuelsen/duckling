@@ -17,7 +17,7 @@
   [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
-  "on <named-day> last week" ; "on Saturday" is refering to last Saturday 
+  "on <named-day> last week" ; "on Saturday" is refering to last Saturday
   [#"(?i)på" {:form :day-of-week}]
   (pred-nth %2 -1)
 
@@ -308,7 +308,7 @@
   (intersect %2 (day-of-month (:value %1)) (year (Integer/parseInt(first (:groups %3)))))
 
   "the ides of <named-month>" ; the ides of march 13th for most months, but on the 15th for March, May, July, and October
-  [#"(?i)midten af" {:form :month}]
+  [#"(?i)midten av" {:form :month}]
   (intersect %2 (day-of-month (if (#{3 5 7 10} (:month %2)) 15 13)))
 
   ;; Hours and minutes (absolute time)

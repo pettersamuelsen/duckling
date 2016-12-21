@@ -54,6 +54,10 @@
   [#"(?i)denne|dette|i|nåværende" (dim :cycle)]
   (cycle-nth (:grain %2) 0)
 
+  "in <cycle>"
+  [#"i" {:form :month}]
+  (pred-nth %2 -1)
+
   "last <cycle>"
   [#"(?i)siste|seneste|forrige" (dim :cycle)]
   (cycle-nth (:grain %2) -1)
