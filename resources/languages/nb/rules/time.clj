@@ -193,6 +193,10 @@
   [#"(?i)(kommende|neste)" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)
 
+  "in <month>"
+  [#"(?i)i" {:form :month}]
+  (pred-nth-not-immediate %2 -1)
+
   ;; for other preds, it can be immediate:
   ;; "this month" => now is part of it
   ; See also: cycles in en.cycles.clj

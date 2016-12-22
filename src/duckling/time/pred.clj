@@ -57,7 +57,7 @@
 ; First-order Predicates
 ;
 ; A predicate is a function that given an input time interval,
-; returns two possibly infinite lazy seqs: 
+; returns two possibly infinite lazy seqs:
 ; one of intervals ahead, one of intervals behind.
 ;
 ; Ahead contains the succession of intervals ending after the start of input
@@ -75,7 +75,7 @@
 ; TODO: check context if we should NOT do this (history apps?)
 
 (defn year [yyyy]
-  (fn& :year [t _] 
+  (fn& :year [t _]
     (let [true-year (if (<= yyyy 99)
                       (-> yyyy (+ 50) (mod 100) (+ 2000) (- 50))
                       yyyy)]
@@ -93,10 +93,10 @@
 
 ; day-of-month is tricky for values 29, 30 and 31 that are not always valid
 ; also, adding 1-month steps doesn't work because (Aug 31) + 1-month = (Sep 30)
-; so the following times would be 30 not 31 
+; so the following times would be 30 not 31
 
 (defn day-of-month [dom]
-  (fn& :day [t _] 
+  (fn& :day [t _]
        (let [anchor (if (<= (t/day t) dom)
                       (t/round t :month)
                       (t/plus (t/round t :month) :month 1))
@@ -109,7 +109,7 @@
                            (filter enough-days)
                            (map add-days))]
          [months-f months-b])))
-       
+
 (defn day-of-week [dow]
   (fn& :day [t _] (let [t-dow (t/day-of-week t)
                 diff (mod (- dow t-dow) 7)
@@ -153,7 +153,7 @@
 
 (declare seq-map)
 
-(defn compose 
+(defn compose
   "Compose several predicates - can see this as intersection"
   ([pred] pred)
   ([pred1' pred2']
@@ -166,7 +166,7 @@
           ;(prn t (:max ctx) (:min ctx))
           (let [;; take the sequence of pred1 forward and backward
                    [seq1-f seq1-b] (pred1 t ctx)
-                   
+
                    ;; clojure.core/mapcat uses apply which breaks lazyness
                    fwd (my-mapcat (fn [time1] ;(infof "hi %s" time1)
                                     (->> (first (pred2 time1 (assoc ctx :max time1 :min time1)))
@@ -175,7 +175,7 @@
                                          (map #(t/intersect time1 %))
                                          (remove nil?)))
                                   (take safe-max (take-while #(t/start-before-the-end-of? % (:max ctx)) seq1-f))) ;; we need a safety net for impossible combinations
-                   bwd (my-mapcat (fn [time1] 
+                   bwd (my-mapcat (fn [time1]
                                     (->> (first (pred2 time1 (assoc ctx :max time1 :min time1)))
                                          (take safe-max)
                                          (take-while #(t/start-before-the-end-of? % time1))
@@ -198,15 +198,15 @@
   "Builds a predicate with only the nth time slot of a presumably cyclical pred after ref-time,
   backward (negative n) or forward (positive n).
   Beware that 0 => first forward, but -1 => first backward
-  
+
   Options:
-  
+
   :not-immediate: if true, the first slot will be dropped if it
   contains t. No effect on backward lookups (t is never containes in them)."
-  
+
   [pred n & [opts]]
   (assert (fn? pred) (format "Invalid predicate: %s" pred))
-  (fn& (-> pred meta :grain) [t ctx]  
+  (fn& (-> pred meta :grain) [t ctx]
     (let [base-time (:reference-time ctx)
           slot (if (<= 0 n)
                  (let [[head & more :as seq] (first (pred base-time ctx))
@@ -225,12 +225,12 @@
 (defn take-n
   "Takes n cycles of pred. Used for 'next 2 weeks' for instance.
   Goes forward for positive n, backward otherwise.
-  
+
   Accepts a :not-immediate option like take-the-nth"
-  
+
   [pred n & [opts]]
   (assert (fn? pred) (format "Invalid predicate: %s" pred))
-  (fn& (-> pred meta :grain) [t ctx]  
+  (fn& (-> pred meta :grain) [t ctx]
     (let [base-time (:reference-time ctx)
           slot (if (<= 0 n)
                  (let [[head & more :as seq] (first (pred base-time ctx))
@@ -253,9 +253,9 @@
   "Like take-the-nth, but takes the nth cyclic-pred *after base-pred*
   (or before if n is negative.
   Since pred generates sequences, it also generates sequences.
-  
+
   Options: :not-immediate works as usual"
-  
+
   [cyclic-pred base-pred n & [opts]]
   (let [f (fn& (-> cyclic-pred meta :grain) [t ctx]
                (if (<= 0 n)
@@ -271,7 +271,7 @@
 (defn take-the-last-of
   "Takes the *last* occurence of cyclic-pred *within* base-pred.
   For example, cyclic-pred is 'Monday' and base-pred 'October'"
-  
+
   [cyclic-pred base-pred]
   (let [f (fn& (-> cyclic-pred meta :grain) [t ctx]
                (let [pivot (t/starting-at-the-end-of t)
@@ -287,12 +287,12 @@
   [f pred & [dont-reverse?]]
   (fn& (-> pred meta :grain) [t ctx] (let [;; take the sequence of pred forward and backward
                  [seq1-f seq1-b] (pred t ctx) ; FIXME TOO RESTRICTIVE, AFTER APPLYING F IT WILL MOVE
-                 
+
                  ;_ (prn "map" t (:min ctx) (:max ctx) (when (first seq1-f) (f (first seq1-f) ctx)))
-                 
+
                  ;seq1-f (take-while #(t/start-before-the-end-of? % (:max ctx)) seq1-f)
                  ;seq1-b (take-while #(t/start-before-the-end-of? (:min ctx) %) seq1-b)
-                  
+
                  ;; times moved from behind to ahead
                  bh-ah (->> seq1-b
                             (take safe-max-interval)
@@ -300,7 +300,7 @@
                             (remove nil?)
                             (take-while #(t/start-before-the-end-of? t %))
                             (?>> (not dont-reverse?) reverse))
-                 
+
                  ; times remaining ahead
                  ah-ah (->> seq1-f
                          (take safe-max-interval)
@@ -308,9 +308,9 @@
                          (remove nil?)
                          (drop-while #(not (t/start-before-the-end-of? t %)))
                          (take-while #(t/start-before-the-end-of? % (:max ctx))))
-                 
+
                  ahead (concat bh-ah ah-ah)
-                 
+
                  ;; times moved from ahead to behind
                  ah-bh (->> seq1-f
                             (take safe-max-interval)
@@ -318,7 +318,7 @@
                             (remove nil?)
                             (take-while #(not (t/start-before-the-end-of? t %)))
                             (?>> (not dont-reverse?) reverse))
-                 
+
                  ; times remaining behing
                  bh-bh (->> seq1-b
                          (take safe-max-interval)
@@ -326,7 +326,7 @@
                          (remove nil?)
                          (drop-while #(t/start-before-the-end-of? t %))
                          (take-while #(t/start-before-the-end-of? (:min ctx) %)))
-                 
+
                  behind (concat ah-bh bh-bh)]
             [ahead behind])))
 
@@ -335,7 +335,7 @@
   and ending at the start (inclusive-to? false) or end (inclusive-to? true)
   of the first pred-from time that follows the start of pred-from.
   Example: (intervals (day-of-week 1) (day-of-week 3) true)"
-  
+
   [pred-from pred-to inclusive-to?]
   (let [inter-fn (if inclusive-to? t/interval-start-end t/interval)
         f (fn [t ctx] (let [slot (first (first (pred-to t ctx)))]
@@ -348,7 +348,7 @@
   Duration can be negative ('three hours before pred').
   The resulting grain is the one just below the duration's grain
   Shifted slots' width is exactly their grain"
-  
+
   [base-pred duration]
   (let [grain (grain-after-shift (t/period-grain duration))
         f (fn [t ctx] (-> t
@@ -371,7 +371,7 @@
       :time
       (do
         (assert pred (format "Cannot resolve token without pred: %s" token))
-        
+
         ; we use ref-time twice
         ; as the first arg of pred, it's just as a lookup starting point
         (let [reference-time (or reference-time (t/now))
@@ -383,13 +383,14 @@
                       first-ahead)]
           (->> (vector ahead first-behind)
                (remove nil?)
+
                ; FIXME use timezone in resolution instead of just adding the field
                (?>> timezone (map #(assoc % :timezone timezone)))
                (map #(assoc token :value %))
                ; TEMP also assoc a 'values' key with the 3 future hypotheses
                ; this key will be used in api/export-value
-               (map #(assoc % :values (take 3 all-ahead))))))
-      
+               (map #(assoc % :values [first-behind])))))
+
       [token]) ; default for other dims
     (catch Throwable e
       (errorf e "Error while resolving %s" (dissoc token :route))
