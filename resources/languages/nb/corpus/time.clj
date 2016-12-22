@@ -50,6 +50,15 @@
   "søn."
   (datetime 2013 2 17)
 
+  "i januar"
+  (datetime 2013 1)
+
+  "i februar"
+  (datetime 2012 2)
+
+  "i mars"
+  (datetime 2012 3)
+
   "Den første mars"
   "1. mars"
   "Den 1. mars"
