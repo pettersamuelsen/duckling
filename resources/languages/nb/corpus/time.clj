@@ -18,6 +18,12 @@
   "i morgen"
   (datetime 2013 2 13)
 
+  "forigårs"
+  (datetime 2013 2 10)
+
+  "overigår"
+  (datetime 2013 2 10)
+
   "mandag"
   "man."
   "på mandag"

@@ -169,7 +169,7 @@
   (cycle-nth :day -1)
 
   "the day before yesterday"
-  #"(?i)i forigårs"
+  #"(?i)i forigårs|forigårs|overigår"
   (cycle-nth :day -2)
 
   "EOM|End of month"
