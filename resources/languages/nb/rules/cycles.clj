@@ -36,7 +36,7 @@
    :grain :week}
 
   "month (cycle)"
-  #"(?i)måned(er)?"
+  #"(?i)måned(er|en)?"
   {:dim :cycle
    :grain :month}
 

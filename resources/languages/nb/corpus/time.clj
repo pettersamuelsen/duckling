@@ -154,6 +154,9 @@
   "sist måned"
   (datetime 2013 1)
 
+  "denne måneden"
+  (datetime 2013 2)
+
   "neste måned"
   (datetime 2013 3)
 
