@@ -113,11 +113,11 @@
   (month-day 12 25)
 
   "christmas eve"
-  #"(?i)julaften?"
+  #"(?i)julaft(en|a)?"
   (month-day 12 24)
 
   "new year's eve"
-  #"(?i)nyttårsaften?"
+  #"(?i)nyttårsaft(en|a)?"
   (month-day 12 31)
 
   "new year's day"

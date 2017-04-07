@@ -31,7 +31,7 @@
    :grain :day}
 
   "week (cycle)"
-  #"(?i)uke(r|n)?"
+  #"(?i)uk(a|e)(r|n)?"
   {:dim :cycle
    :grain :week}
 

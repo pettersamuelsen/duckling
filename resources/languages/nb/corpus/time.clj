@@ -139,6 +139,7 @@
 ;   ;; Cycles
 
   "denne uken"
+  "denne uka"
   (datetime 2013 2 11 :grain :week)
 
   "forrige uke"
@@ -212,12 +213,15 @@
   (datetime 2013 2 22 :day-of-week 5)
 
   "mandag denne uken"
+  "mandag denne uka"
   (datetime 2013 2 11 :day-of-week 1)
 
   "tirsdag denne uken"
+  "tirsdag denne uka"
   (datetime 2013 2 12 :day-of-week 2)
 
   "onsdag denne uken"
+  "onsdag denne uka"
   (datetime 2013 2 13 :day-of-week 3)
 
   "i overimorgen"
@@ -419,7 +423,9 @@
   (datetime 1954)
 
   "et år etter julaften"
+  "et år etter julafta"
   "ett år etter julaften"
+  "ett år etter julafta"
   (datetime 2013 12) ; resolves as after last Xmas...
 
 
@@ -441,6 +447,7 @@
   (datetime 2013 12 25)
 
   "nyttårsaften"
+  "nyttårsafta"
   (datetime 2013 12 31)
 
   "nyttårsdag"
